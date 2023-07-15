@@ -63,8 +63,9 @@ export default {
           message: "Your answer has been saved",
         });
         this.$emit("answer", {
-          question: this.question,
+          question: this.question.question,
           answer: this.selectedAnswer,
+          correct: this.selectedAnswer === this.question.correctAnswer,
         });
       }
     },

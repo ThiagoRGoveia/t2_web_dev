@@ -22,6 +22,7 @@
       <q-btn label="See results" @click="seeResults" />
     </div>
     <q-table
+      :key="key"
       :data="questions"
       :columns="columns"
       row-key="question"
@@ -34,22 +35,29 @@
     <q-dialog v-model="showQuestionCard" persistent>
       <question-card @answer="handleAnswer" :question="selectedQuestion" />
     </q-dialog>
+
+    <q-dialog v-model="showResults" persistent>
+      <score-card :answers="answers" />
+    </q-dialog>
   </q-page>
 </template>
 
 <script>
 import axios from "axios";
 import QuestionCard from "./QuestionCard.vue";
+import ScoreCard from "./ScoreCard.vue";
 
 export default {
-  components: { QuestionCard },
+  components: { QuestionCard, ScoreCard },
 
   data() {
     return {
+      key: 0,
       amount: 40,
       loading: false,
       selectedQuestion: null,
       showQuestionCard: false,
+      showResults: false,
       category: {
         id: 9,
         name: "General Knowledge",
@@ -57,7 +65,18 @@ export default {
       difficulty: "all",
       categories: [],
       questions: [],
+      answers: [],
       columns: [
+        {
+          format: (val, row) => {
+            if (
+              this.answers.find((answer) => answer.question === row.question)
+            ) {
+              return "\u2611";
+            }
+            return "\u2610";
+          },
+        },
         {
           name: "category",
           required: true,
@@ -109,16 +128,37 @@ export default {
       { id: 31, name: "Entertainment: Japanese Anime & Manga" },
       { id: 32, name: "Entertainment: Cartoon & Animations" },
     ];
+    this.loadQuestionsFromLocalStorage();
     await this.fetchQuestions();
   },
   methods: {
-    seeResults() {},
+    seeResults() {
+      this.showResults = true;
+    },
+    loadQuestionsFromLocalStorage() {
+      const keys = Object.keys(window.localStorage);
+      const questionKeys = keys.filter((key) => key.includes("question-"));
+      this.answers = questionKeys.map((key) =>
+        JSON.parse(localStorage.getItem(key))
+      );
+    },
     handleAnswer(answer) {
-      console.log(answer);
+      window.localStorage.setItem(
+        `question-${answer.question}`,
+        JSON.stringify(answer)
+      );
+      const previousAnswer = this.answers.find(
+        (a) => a.question === answer.question
+      );
+      if (previousAnswer) {
+        previousAnswer.answer = answer.answer;
+      } else {
+        this.answers.push(answer);
+      }
       this.showQuestionCard = false;
+      this.key++;
     },
     openQuestionCard(e, row) {
-      console.log(row);
       this.selectedQuestion = row;
       this.showQuestionCard = true;
     },
@@ -132,17 +172,19 @@ export default {
             this.difficulty === "all" ? "" : this.difficulty
           }&encode=url3986`
         );
-        this.questions = response.data.results.map((question) => {
-          return {
-            category: decodeURIComponent(question.category),
-            difficulty: decodeURIComponent(question.difficulty),
-            question: decodeURIComponent(question.question),
-            correctAnswer: decodeURIComponent(question.correct_answer),
-            incorrectAnswers: question.incorrect_answers.map((answer) =>
-              decodeURIComponent(answer)
-            ),
-          };
-        });
+        this.questions = response.data.results
+          .map((question) => {
+            return {
+              category: decodeURIComponent(question.category),
+              difficulty: decodeURIComponent(question.difficulty),
+              question: decodeURIComponent(question.question),
+              correctAnswer: decodeURIComponent(question.correct_answer),
+              incorrectAnswers: question.incorrect_answers.map((answer) =>
+                decodeURIComponent(answer)
+              ),
+            };
+          })
+          .sort((a, b) => a.question.localeCompare(b.question));
       } catch (err) {
         console.error(err);
       } finally {
