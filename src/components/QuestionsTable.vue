@@ -1,5 +1,5 @@
 <template>
-  <q-page padding style="max-width: 60vw; margin: auto">
+  <q-page>
     <div style="margin: 0 20px 35px 0">
       <q-select
         v-model="category"
@@ -194,3 +194,24 @@ export default {
   },
 };
 </script>
+
+<style>
+
+.q-page{
+  max-width: 100vw;
+  margin: auto;
+  padding: 10px
+}
+@media only screen and (min-width: 1000px){
+  .q-page{
+    max-width: 80vw;
+  }
+
+  @media only screen and (min-width: 1400px){
+    .q-page{
+      max-width: 60vw;
+    }
+  }
+
+}
+</style>
