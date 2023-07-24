@@ -23,6 +23,7 @@
     </div>
     <q-table
       :key="key"
+      :grid="isMobile"
       :data="questions"
       :columns="columns"
       row-key="question"
@@ -54,6 +55,7 @@ export default {
     return {
       key: 0,
       amount: 40,
+      isMobile: false,
       loading: false,
       selectedQuestion: null,
       showQuestionCard: false,
@@ -102,6 +104,7 @@ export default {
     };
   },
   async created() {
+    this.isMobile = this.$q.screen.lt.sm;
     this.categories = [
       { id: 9, name: "General Knowledge" },
       { id: 10, name: "Entertainment: Books" },
@@ -196,22 +199,20 @@ export default {
 </script>
 
 <style>
-
-.q-page{
+.q-page {
   max-width: 100vw;
   margin: auto;
-  padding: 10px
+  padding: 10px;
 }
-@media only screen and (min-width: 1000px){
-  .q-page{
+@media only screen and (min-width: 1000px) {
+  .q-page {
     max-width: 80vw;
   }
 
-  @media only screen and (min-width: 1400px){
-    .q-page{
+  @media only screen and (min-width: 1400px) {
+    .q-page {
       max-width: 60vw;
     }
   }
-
 }
 </style>
