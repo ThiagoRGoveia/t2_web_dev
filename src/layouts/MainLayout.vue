@@ -2,12 +2,24 @@
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
       <q-toolbar>
-        <q-toolbar-title> Trivia Game </q-toolbar-title>
+        <q-toolbar-title> TRIVIA GAME </q-toolbar-title>
       </q-toolbar>
     </q-header>
+
     <q-page-container>
       <router-view />
     </q-page-container>
+
+    <q-footer elevated >
+      <q-toolbar style="min-height: 30px;">
+        <q-toolbar-title>
+          <q-avatar>
+            <img src="src/assets/icmc_logo.png" alt="Logo"/>
+          </q-avatar>
+          Desenvolvimento Web e Mobile - SSC0961
+        </q-toolbar-title>
+      </q-toolbar>
+    </q-footer>
   </q-layout>
 </template>
 

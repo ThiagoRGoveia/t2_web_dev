@@ -1,6 +1,6 @@
 <template>
   <q-page>
-    <div style="margin: 0 20px 35px 0">
+    <div id="settings" style="margin: 0 20px 35px 0">
       <q-select
         v-model="category"
         :options="categories"
@@ -15,11 +15,12 @@
       />
       <br />
       <q-btn
+        id="fetchbtn"
         label="Fetch Questions"
         @click="fetchQuestions"
         style="margin-right: 10px"
       />
-      <q-btn label="See results" @click="seeResults" />
+      <q-btn id="seebtn" label="See results" @click="seeResults" />
     </div>
     <q-table
       :key="key"
@@ -204,15 +205,33 @@ export default {
   margin: auto;
   padding: 10px;
 }
+@media only screen and (max-width: 600px) {
+  .q-btn{
+    width: 35vw;
+    min-width: 155px;
+    margin-right: 2.5vw;
+    margin-bottom: 2.5vw;
+  }
+}
+
+@media only screen and (max-width: 390px) {
+  .q-btn{
+    width: 70vw;
+    min-width: 50vw;
+    margin-left: 8vw;
+    margin-right: 8vw;
+    margin-bottom: 2.5vw;
+  }
+}
+ 
 @media only screen and (min-width: 1000px) {
   .q-page {
     max-width: 80vw;
   }
-
-  @media only screen and (min-width: 1400px) {
-    .q-page {
-      max-width: 60vw;
-    }
+}
+@media only screen and (min-width: 1400px) {
+  .q-page {
+    max-width: 60vw;
   }
 }
 </style>
