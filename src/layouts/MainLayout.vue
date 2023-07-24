@@ -14,7 +14,7 @@
       <q-toolbar style="min-height: 30px;">
         <q-toolbar-title>
           <q-avatar>
-            <img src="src/assets/icmc_logo.png" alt="Logo"/>
+            <img id="img" :src="require('src/assets/icmc_logo.png')" alt="Logo" style="background-color: rgb(233, 207, 207);"/>
           </q-avatar>
           Desenvolvimento Web e Mobile - SSC0961
         </q-toolbar-title>
@@ -22,7 +22,7 @@
     </q-footer>
   </q-layout>
 </template>
-
+ 
 <script>
 export default {
   name: "MainLayout",
